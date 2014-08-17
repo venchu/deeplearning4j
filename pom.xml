@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.deeplearning4j</groupId>
@@ -26,8 +27,10 @@
 
     </distributionManagement>
 
-
-    <properties>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<hadoop.version>2.0.0-cdh4.6.0</hadoop.version>
+		<mahout.version>0.7-cdh4.6.0</mahout.version>
 		<slf4j.version>1.7.5</slf4j.version>
 		<junit.version>4.11</junit.version>
 	</properties>
@@ -105,10 +108,11 @@
 		<module>deeplearning4j-scaleout</module>
 		<module>deeplearning4j-examples</module>
 		<module>deeplearning4j-hadoop</module>
-        <module>deeplearning4j-distribution</module>
-		<module>hadoop-yarn</module>
+	        <module>deeplearning4j-distribution</module>
+		<module>deeplearning4j-hadoop-yarn</module>
         <module>linear-algebra</module>
-    </modules>
+    <module>dl4j-yarn</module>
+  </modules>
 
 	<licenses>
 		<license>
@@ -124,6 +128,12 @@
 			<name>Adam Gibson</name>
 			<email>0@blix.io</email>
 		</developer>
+              <developer>
+                        <id>jpatanooga</id>
+                        <name>Josh Patterson</name>
+                        <email>jpatterson@floe.tv</email>
+                </developer>
+
 	</developers>
 
 
@@ -211,6 +221,91 @@
                     <artifactId>guava</artifactId>
                     <version>15.0</version>
                 </dependency>
+
+
+
+		<dependency>
+			<groupId>org.apache.hadoop</groupId>
+			<artifactId>hadoop-yarn-api</artifactId>
+			<version>${hadoop.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.hadoop</groupId>
+			<artifactId>hadoop-yarn-common</artifactId>
+			<version>${hadoop.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.hadoop</groupId>
+			<artifactId>hadoop-yarn-server-common</artifactId>
+			<version>${hadoop.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.hadoop</groupId>
+			<artifactId>hadoop-yarn-server-nodemanager</artifactId>
+			<version>${hadoop.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.hadoop</groupId>
+			<artifactId>hadoop-yarn-server-resourcemanager</artifactId>
+			<version>${hadoop.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.avro</groupId>
+			<artifactId>avro</artifactId>
+			<version>1.7.1</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.avro</groupId>
+			<artifactId>avro-ipc</artifactId>
+			<version>1.7.1</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.hadoop</groupId>
+			<artifactId>hadoop-hdfs</artifactId>
+			<version>${hadoop.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.hadoop</groupId>
+			<artifactId>hadoop-hdfs</artifactId>
+			<version>${hadoop.version}</version>
+			<classifier>tests</classifier>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.hadoop</groupId>
+			<artifactId>hadoop-common</artifactId>
+			<version>${hadoop.version}</version>
+			<classifier>tests</classifier>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.hadoop</groupId>
+			<artifactId>hadoop-yarn-server-tests</artifactId>
+			<version>${hadoop.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-math3</artifactId>
+			<version>3.2</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>com.cloudera</groupId>
+			<artifactId>iterativereduce</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
 
                 <dependency>
 				<groupId>junit</groupId>
