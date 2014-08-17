@@ -1,3 +1,4 @@
+package org.deeplearning4j.hadoop-yarn.iterativereduce;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -16,16 +17,8 @@ import java.io.ObjectOutputStream;
  * @author josh
  *
  */
-public class DBNParameterVector {
+public class ParameterVector {
 
-	// public DeepBeliefNetwork dbn = null;
-/*
-	public HiddenLayer[] hiddenLayers;
-
-	public LogisticRegression logisticRegressionLayer;
-	// DA / RBM Layers
-	public NeuralNetworkVectorized[] preTrainingLayers;
-*/
 	
 	// worker sends this signal when it has finished N passes of it's split
 	// signal from worker->to->master
