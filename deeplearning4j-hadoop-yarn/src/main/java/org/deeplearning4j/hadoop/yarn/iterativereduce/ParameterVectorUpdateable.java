@@ -1,4 +1,4 @@
-package org.deeplearning4j.hadoop-yarn.iterativereduce;
+package org.deeplearning4j.hadoop.yarn.iterativereduce;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
