@@ -36,7 +36,8 @@ public class WorkerNode implements ComputableWorker<ParameterVectorUpdateable> {
 	
 	protected Configuration conf = null;	  
 
-	DeepBeliefNetwork dbn = null;
+	//DeepBeliefNetwork dbn = null;
+	DBN dbn = null;
 	
 	private boolean preTrainPhaseComplete = false;
 	private boolean fineTunePhaseComplete = false;
@@ -447,6 +448,7 @@ public class WorkerNode implements ComputableWorker<ParameterVectorUpdateable> {
 			
 			this.n_layers = hiddenLayerSizes.length;
 			
+			/*
 			this.dbn = new DeepBeliefNetwork( numIns, hiddenLayerSizes, numLabels, n_layers, rng ); //, Matrix input, Matrix labels);
 	
 			// default it to off
@@ -459,7 +461,28 @@ public class WorkerNode implements ComputableWorker<ParameterVectorUpdateable> {
 			
 			this.dbn.setSparsity( Double.parseDouble( this.conf.get( "tv.floe.metronome.dbn.conf.sparsity", "0.01") ) );
 			this.dbn.setMomentum( Double.parseDouble( this.conf.get( "tv.floe.metronome.dbn.conf.momentum", "0" ) ) );		
+			*/
 			
+			// New DL4J API Style
+			
+			RandomGenerator gen = new MersenneTwister(123);
+
+	        NeuralNetConfiguration conf = new NeuralNetConfiguration.Builder()
+	                .hiddenUnit(RBM.HiddenUnit.RECTIFIED).momentum(5e-1f)
+	                .visibleUnit(RBM.VisibleUnit.GAUSSIAN).regularization(true)
+	                .regularizationCoefficient(2e-4f).dist(Distributions.uniform(gen))
+	                .activationFunction(Activations.tanh()).iterations(100)
+	                .weightInit(WeightInit.DISTRIBUTION)
+	                .lossFunction(LossFunctions.LossFunction.RECONSTRUCTION_CROSSENTROPY).rng(gen)
+	                .learningRate(1e-1f).nIn(4).nOut(3).build();
+
+
+	        DBN d = new DBN.Builder().configure(conf)
+	                .hiddenLayerSizes(new int[]{3})
+	                .build();
+
+	        d.getOutputLayer().conf().setActivationFunction(Activations.softMaxRows());
+	        d.getOutputLayer().conf().setLossFunction(LossFunctions.LossFunction.MCXENT);			
 	      
 	      
 	    } catch (Exception e) {
