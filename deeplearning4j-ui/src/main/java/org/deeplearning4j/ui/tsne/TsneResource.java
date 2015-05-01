@@ -36,6 +36,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.LoggerFactory;
+
 
 /**
  * Created by agibsonccc on 10/8/14.
@@ -46,6 +48,7 @@ public class TsneResource extends FileResource {
     private VPTree tree;
     private List<VocabWord> words;
     private VocabCache vocab;
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(FileResource.class);
     /**
      * The file path for uploads
      *
@@ -65,11 +68,11 @@ public class TsneResource extends FileResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getVocab() {
         List<String> words = new ArrayList<>();
-        for(VocabWord word : this.words)
+        for (VocabWord word : this.words)
             words.add(word.getWord());
         return Response.ok((new ArrayList<>(words))).build();
     }
-    
+
     @POST
     @Path("/upload")
     @Produces(MediaType.APPLICATION_JSON)

@@ -32,13 +32,9 @@ public abstract class FileResource {
         this.filePath = filePath;
     }
 
-
-
-
-
     public Response doUploadFile(
             InputStream uploadedInputStream,
-           FormDataContentDisposition fileDetail) throws  IOException {
+            FormDataContentDisposition fileDetail) throws  IOException {
         String uploadedFileLocation = new File(filePath,fileDetail.getFileName()).getAbsolutePath();
         LOGGER.info(uploadedFileLocation);
         // save it

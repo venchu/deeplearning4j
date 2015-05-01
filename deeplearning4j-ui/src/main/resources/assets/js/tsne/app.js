@@ -23,12 +23,10 @@
 
 
 $(document).ready(function() {
-    $('#kform').hide();
     // Add events
     $('#form').fileUpload({success : function(data, textStatus, jqXHR){
         document.getElementById('form').reset();
         $('#form').hide();
-
         $.ajax({
             url: '/tsne/vocab',
             type: 'POST',

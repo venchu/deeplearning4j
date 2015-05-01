@@ -13,6 +13,7 @@
         <script src="/assets/jquery-fileupload.js"></script>
         <script src="/assets/bootstrap-3.3.4-dist/js/bootstrap.min.js"></script>
         <script src="/assets/d3.min.js"></script>
+        <script src="/assets/tsne/app.js"></script>
         <script src="/assets/render.js"></script>
         <link href='http://fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
 
