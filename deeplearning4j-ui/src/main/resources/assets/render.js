@@ -77,24 +77,24 @@ function drawEmbedding() {
 
 
 
-$(window).load(function() {
-  $.ajax({
-    url: "/api/coords",
-    cache: false
-  })
-    .done(function( data ) {
-      for(var i = 0; i < data.length; i++) {
-         var split = data[i].split(',');
-         console.log(split.length);
-         var xCoord = split[0];
-         var yCoord = split[1];
-         var name2 = split[2];
-         x.push(xCoord);
-         y.push(yCoord);
-         name3.push(name2);
-      }
-
-      drawEmbedding();
-    });
-
-});
+//$(window).load(function() {
+//  $.ajax({
+//    url: "/api/coords",
+//    cache: false
+//  })
+//    .done(function( data ) {
+//      for(var i = 0; i < data.length; i++) {
+//         var split = data[i].split(',');
+//         console.log(split.length);
+//         var xCoord = split[0];
+//         var yCoord = split[1];
+//         var name2 = split[2];
+//         x.push(xCoord);
+//         y.push(yCoord);
+//         name3.push(name2);
+//      }
+//
+//      drawEmbedding();
+//    });
+//
+//});

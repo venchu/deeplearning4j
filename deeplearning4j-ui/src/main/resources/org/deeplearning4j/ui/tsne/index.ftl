@@ -3,11 +3,15 @@
 	<head>
 		<meta charset="utf-8">
 		<title>TSNE</title>
-		<link rel="stylesheet" href="node_modules/todomvc-common/base.css">
-		<link rel="stylesheet" href="node_modules/todomvc-app-css/index.css">
+        <link rel="stylesheet" href="assets/bootstrap-3.3.4-dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="assets/bootstrap-3.3.4-dist/css/bootstrap-theme.min.css">
+		<#--<link rel="stylesheet" href="node_modules/todomvc-common/base.css">-->
+		<#--<link rel="stylesheet" href="node_modules/todomvc-app-css/index.css">-->
 
         <!-- jQuery -->
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+        <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+        <script src="assets/jquery-fileupload.js"></script>
+        <script src="assets/bootstrap-3.3.4-dist/js/bootstrap.min.js"></script>
         <script src="/assets/d3.min.js"></script>
         <script src="/assets/render.js"></script>
         <link href='http://fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
@@ -60,25 +64,33 @@
 
 	</head>
 	<body>
-		<section id="todoapp"></section>
-		<footer id="info">
-			<p>Double-click to edit a todo</p>
-			<p>Created by <a href="http://github.com/petehunt/">petehunt</a></p>
-			<p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
-		</footer>
+    <div id="container">
+        <div id="wrapper">
+            <div id="page-content-wrapper">
+                <div class="container-fluid">
+                    <h1 style="text-align: center; font-size: 400%">Deeplearning4j</h1>
+                    <hr>
+                    <h2>t-Distributed Stochastic Neighbor Embedding (t-SNE)</h2>
+                    <h4>
+                            <p>Upload a <b><i>vectorized</i></b> text file.</p>
+                            <ul>
+                                <li>The text file should be space-delimited.</li>
+                                <li>Each row should be a feature vector separated by spaces.</li>
+                                <li>If an individual feature has multiple words, use underscore to separate the words.</li>
+                            </ul>
+                    </h4>
+                    <br>
+                    <div class="row" id="upload">
+                        <form encType="multipart/form-data" action="/tsne/upload" method="POST" id="form">
+                            <input name="file" type="file">
+                            <br>
+                            <input type="submit">
+                        </form>
+                    </div>
+                </div>
+            </div>
 
-		<script src="node_modules/todomvc-common/base.js"></script>
-		<script src="node_modules/react/dist/react-with-addons.js"></script>
-		<script src="node_modules/react/dist/JSXTransformer.js"></script>
-		<script src="node_modules/director/build/director.js"></script>
-
-		<script src="js/utils.js"></script>
-		<script src="js/todoModel.js"></script>
-		<!-- jsx is an optional syntactic sugar that transforms methods in React's
-		`render` into an HTML-looking format. Since the two models above are
-		unrelated to React, we didn't need those transforms. -->
-		<script type="text/jsx" src="js/todoItem.jsx"></script>
-		<script type="text/jsx" src="js/footer.jsx"></script>
-		<script type="text/jsx" src="js/app.jsx"></script>
+        </div>
+    </div>
 	</body>
 </html>

@@ -23,7 +23,7 @@ import io.dropwizard.views.View;
  */
 public class TsneView extends View {
     public TsneView() {
-        super("render.ftl");
+        super("index.ftl");
 
     }
 }
