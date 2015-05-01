@@ -69,16 +69,7 @@ public class TsneResource extends FileResource {
             words.add(word.getWord());
         return Response.ok((new ArrayList<>(words))).build();
     }
-
-//    @POST
-//    @Path("/coords")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response getVocab() {
-//        List<String> words = new ArrayList<>();
-//        for(VocabWord word : this.words)
-//            words.add(word.getWord());
-//        return Response.ok((new ArrayList<>(words))).build();
-//    }
+    
     @POST
     @Path("/upload")
     @Produces(MediaType.APPLICATION_JSON)

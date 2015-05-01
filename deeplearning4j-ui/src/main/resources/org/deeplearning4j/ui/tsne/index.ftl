@@ -3,15 +3,15 @@
 	<head>
 		<meta charset="utf-8">
 		<title>TSNE</title>
-        <link rel="stylesheet" href="assets/bootstrap-3.3.4-dist/css/bootstrap.min.css">
-        <link rel="stylesheet" href="assets/bootstrap-3.3.4-dist/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="/assets/bootstrap-3.3.4-dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/assets/bootstrap-3.3.4-dist/css/bootstrap-theme.min.css">
 		<#--<link rel="stylesheet" href="node_modules/todomvc-common/base.css">-->
 		<#--<link rel="stylesheet" href="node_modules/todomvc-app-css/index.css">-->
 
         <!-- jQuery -->
         <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
-        <script src="assets/jquery-fileupload.js"></script>
-        <script src="assets/bootstrap-3.3.4-dist/js/bootstrap.min.js"></script>
+        <script src="/assets/jquery-fileupload.js"></script>
+        <script src="/assets/bootstrap-3.3.4-dist/js/bootstrap.min.js"></script>
         <script src="/assets/d3.min.js"></script>
         <script src="/assets/render.js"></script>
         <link href='http://fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>

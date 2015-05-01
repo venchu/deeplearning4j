@@ -21,7 +21,6 @@
  */
 
 
-
 $(document).ready(function() {
     $('#kform').hide();
     // Add events
@@ -77,7 +76,7 @@ $(document).ready(function() {
         console.log(err);
     }});
 
-
+function renderNearestNeighbors(word, numWords){
         $.ajax({
             url: '/nearestneighbors/words',
             type: 'POST',
@@ -118,4 +117,4 @@ $(document).ready(function() {
             }
         });
     }
-});
+   });
