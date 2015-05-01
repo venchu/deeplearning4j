@@ -100,7 +100,6 @@ $(document).ready(function() {
                     }
                     html += '</ol>';
                     $('#neighbors').html(html);
-                    //on click of any LI element, call renderNearestNeighbors (pass in word and 5)
                 }
                 else
                 {
