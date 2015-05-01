@@ -32,9 +32,14 @@ public abstract class FileResource {
         this.filePath = filePath;
     }
 
-    public Response doUploadFile(
-            InputStream uploadedInputStream,
-            FormDataContentDisposition fileDetail) throws  IOException {
+    @POST
+    @Path("/upload")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response uploadFile(
+            @FormDataParam("0") InputStream uploadedInputStream,
+            @FormDataParam("0") FormDataContentDisposition fileDetail) throws IOException {
+
         String uploadedFileLocation = new File(filePath,fileDetail.getFileName()).getAbsolutePath();
         LOGGER.info(uploadedFileLocation);
         // save it

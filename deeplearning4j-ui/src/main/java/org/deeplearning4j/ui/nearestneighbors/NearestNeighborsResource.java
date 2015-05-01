@@ -75,17 +75,6 @@ public class NearestNeighborsResource extends FileResource {
     }
 
     @POST
-    @Path("/upload")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public Response uploadFile(
-            @FormDataParam("0") InputStream uploadedInputStream,
-            @FormDataParam("0") FormDataContentDisposition fileDetail) throws IOException {
-        return doUploadFile(uploadedInputStream, fileDetail);
-    }
-
-
-    @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/words")
     public Response getWords(NearestNeighborsQuery query) {

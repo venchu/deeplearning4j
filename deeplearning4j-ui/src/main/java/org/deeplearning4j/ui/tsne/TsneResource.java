@@ -73,16 +73,6 @@ public class TsneResource extends FileResource {
         return Response.ok((new ArrayList<>(words))).build();
     }
 
-    @POST
-    @Path("/upload")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public Response uploadFile(
-            @FormDataParam("file") InputStream uploadedInputStream,
-            @FormDataParam("file") FormDataContentDisposition fileDetail) throws IOException {
-        return doUploadFile(uploadedInputStream, fileDetail);
-    }
-
     @Override
     public void handleUpload(File path) {
             try {
