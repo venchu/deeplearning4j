@@ -10,7 +10,6 @@ import org.apache.commons.io.IOUtils;
 import org.deeplearning4j.ui.nearestneighbors.NearestNeighborsResource;
 import org.deeplearning4j.ui.renders.RendersResource;
 import org.deeplearning4j.ui.tsne.TsneResource;
-import org.deeplearning4j.ui.uploads.FileResource;
 import org.deeplearning4j.ui.weights.WeightResource;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;

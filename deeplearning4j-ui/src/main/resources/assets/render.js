@@ -72,9 +72,9 @@ function drawEmbedding() {
 
 function renderTSNE(data) {
 
-        $(window).load(function() {
           $.ajax({
-            url: "/api/coords",
+            url: "/tsne/coords",
+            method : 'POST',
             cache: false
           })
             .done(function( data ) {
@@ -90,7 +90,9 @@ function renderTSNE(data) {
               }
 
               drawEmbedding();
+            }).error(function(error) {
+                  console.log(error);
             });
 
-        });
+
 }

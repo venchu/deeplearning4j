@@ -73,12 +73,8 @@
                     <hr>
                     <h2>t-Distributed Stochastic Neighbor Embedding (t-SNE)</h2>
                     <h4>
-                            <p>Upload a <b><i>vectorized</i></b> text file.</p>
-                            <ul>
-                                <li>The text file should be space-delimited.</li>
-                                <li>Each row should be a feature vector separated by spaces.</li>
-                                <li>If an individual feature has multiple words, use underscore to separate the words.</li>
-                            </ul>
+                        <p id="tsne-description">Upload a text file. The site will render a t-Distributed Stochastic Neighbor visualization (aka word cloud).</p>
+                        <p id="tsne-loaded" hidden>Below is the t-Distributed Stochastic Neighbor visualization.</p>
                     </h4>
                     <br>
                     <div class="row" id="upload">

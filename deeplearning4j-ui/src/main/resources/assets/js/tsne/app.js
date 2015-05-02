@@ -27,35 +27,9 @@ $(document).ready(function() {
     $('#form').fileUpload({success : function(data, textStatus, jqXHR){
         document.getElementById('form').reset();
         $('#form').hide();
-        $.ajax({
-            url: '/tsne/vocab',
-            type: 'POST',
-            data: data,
-            cache: false,
-            success: function(data, textStatus, jqXHR)
-            {
-                if(typeof data.error === 'undefined')
-                {
-                    // Success so call function to process the form
-                    console.log('SUCCESS');
-                    renderTSNE(data);
-                }
-                else
-                {
-                    // Handle errors here
-                    console.log('ERRORS: ' + data.error);
-                }
-            },
-            error: function(jqXHR, textStatus, errorThrown)
-            {
-                // Handle errors here
-                console.log('ERRORS: ' + textStatus);
-            },
-            complete: function()
-            {
-                // STOP LOADING SPINNER
-            }
-        });
+        $('tsne-description').hide();
+        $('tsne-loaded').show();
+        renderTSNE(data);
     },error : function(err) {
         console.log(err);
     }});

@@ -17,13 +17,16 @@
 package org.deeplearning4j.ui.tsne;
 
 import io.dropwizard.views.View;
+import org.apache.commons.io.FileUtils;
 import org.deeplearning4j.berkeley.Pair;
+import org.deeplearning4j.clustering.sptree.DataPoint;
 import org.deeplearning4j.clustering.vptree.VPTree;
 import org.deeplearning4j.models.embeddings.WeightLookupTable;
 import org.deeplearning4j.models.embeddings.inmemory.InMemoryLookupTable;
 import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
 import org.deeplearning4j.models.word2vec.VocabWord;
 import org.deeplearning4j.models.word2vec.wordstore.VocabCache;
+import org.deeplearning4j.ui.nearestneighbors.NearestNeighborsQuery;
 import org.deeplearning4j.ui.uploads.FileResource;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -35,7 +38,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.slf4j.LoggerFactory;
 
 
@@ -45,10 +51,8 @@ import org.slf4j.LoggerFactory;
 @Path("/tsne")
 @Produces(MediaType.TEXT_HTML)
 public class TsneResource extends FileResource {
-    private VPTree tree;
-    private List<VocabWord> words;
-    private VocabCache vocab;
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(FileResource.class);
+    private String path;
     /**
      * The file path for uploads
      *
@@ -63,24 +67,25 @@ public class TsneResource extends FileResource {
         return new TsneView();
     }
 
+    private List<String> coords;
+
     @POST
-    @Path("/vocab")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getVocab() {
-        List<String> words = new ArrayList<>();
-        for (VocabWord word : this.words)
-            words.add(word.getWord());
-        return Response.ok((new ArrayList<>(words))).build();
+    @Path("/coords")
+    public Response coords() {
+
+        if(coords.isEmpty())
+            throw new IllegalStateException("Unable to get coordinates; empty");
+
+        return Response.ok(coords).build();
     }
 
+    public void setPath(String path) throws IOException {
+        coords = FileUtils.readLines(new File(path));
+    }
     @Override
     public void handleUpload(File path) {
             try {
-                Pair<WeightLookupTable,VocabCache> vocab = WordVectorSerializer.loadTxt(path);
-                InMemoryLookupTable table = (InMemoryLookupTable) vocab.getFirst();
-                tree = new VPTree(table.getSyn0(),"cosinesimilarity");
-                words = new ArrayList<>(vocab.getSecond().vocabWords());
-                this.vocab = vocab.getSecond();
+            setPath(path.getAbsolutePath());
             } catch (Exception e) {
                 e.printStackTrace();
             }
