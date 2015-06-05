@@ -98,6 +98,8 @@ public class RNTN implements Layer {
     protected String outputActivation = "softmax";
     protected AdaGrad paramAdaGrad;
     protected int numParameters = -1;
+    private boolean actorSystemOn = false;
+
     /** Regularization cost for the applyTransformToOrigin matrix  */
     private double regTransformMatrix = 0.001f;
 
@@ -106,7 +108,6 @@ public class RNTN implements Layer {
 
     /** Regularization cost for the word vectors */
     private double regWordVector = 0.0001f;
-
 
     /**
      * How many epochs between resets of the adagrad learning rates.
@@ -334,7 +335,7 @@ public class RNTN implements Layer {
         binary.put(indices2,randomTransformBlock());
         if(binary.data().dataType() == DataBuffer.Type.DOUBLE)
             return Nd4j.getBlasWrapper().scal(scalingForInit,binary);
-        return Nd4j.getBlasWrapper().scal((float) scalingForInit,binary);
+        return Nd4j.getBlasWrapper().scal((float) scalingForInit, binary);
     }
 
     public INDArray randomTransformBlock() {
@@ -365,7 +366,7 @@ public class RNTN implements Layer {
      */
     public void fit(List<Tree> trainingBatch) {
         final CountDownLatch c = new CountDownLatch(trainingBatch.size());
-
+        ensureOn();
         List<Future<Object>> futureBatch = fitAsync(trainingBatch);
 
         for(Future<Object> f : futureBatch) {
@@ -386,6 +387,7 @@ public class RNTN implements Layer {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
+        shutdown();
     }
 
     /**
@@ -406,16 +408,16 @@ public class RNTN implements Layer {
                     try {
                         INDArray params = getParameters();
                         INDArray gradient = getValueGradient(trainingBatch);
-                        if(params.length() != gradient.length())
+                        if (params.length() != gradient.length())
                             throw new IllegalStateException("Params not equal to gradient!");
                         setParams(params.subi(gradient));
-                    }catch(NegativeArraySizeException e) {
+                    } catch (NegativeArraySizeException e) {
                         log.warn("Couldnt compute parameters due to negative array size...for trees " + t);
                     }
 
                     return null;
                 }
-            },rnTnActorSystem.dispatcher()));
+            }, rnTnActorSystem.dispatcher()));
 
 
         }
@@ -472,8 +474,6 @@ public class RNTN implements Layer {
         }
     }
 
-
-
     private INDArray getINDArrayGradient(INDArray deltaFull, INDArray leftVector, INDArray rightVector) {
         int size = deltaFull.length();
         INDArray Wt_df = Nd4j.create(size,size * 2, size*2);
@@ -487,7 +487,6 @@ public class RNTN implements Layer {
         }
         return Wt_df;
     }
-
 
 
     public INDArray getFeatureVector(String word) {
@@ -924,7 +923,7 @@ public class RNTN implements Layer {
 
 
     public INDArray getValueGradient(final List<Tree> trainingBatch) {
-
+        ensureOn();
 
         // We use TreeMap for each of these so that they stay in a
         // canonical sorted order
@@ -1043,13 +1042,30 @@ public class RNTN implements Layer {
             paramAdaGrad = new AdaGrad(1,derivative.columns());
 
         derivative = paramAdaGrad.getGradient(derivative);
-
+         shutdown();
         return derivative;
     }
 
-
     public double getValue() {
         return value;
+    }
+
+    /**
+     *
+     * Shut down this network actor
+     */
+    private void shutdown() {
+           if(actorSystemOn) {
+               rnTnActorSystem.shutdown();
+               actorSystemOn = false;
+           }
+    }
+
+    private void ensureOn() {
+        if (!actorSystemOn){
+            this.rnTnActorSystem = ActorSystem.create();
+            actorSystemOn = true;
+        }
     }
 
     @Override
@@ -1403,10 +1419,8 @@ public class RNTN implements Layer {
 
             return rt;
         }
+
+
     }
-
-
-
-
 
 }
