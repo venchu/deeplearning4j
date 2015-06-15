@@ -36,6 +36,8 @@ import org.deeplearning4j.nn.conf.override.ConfOverride;
 import org.deeplearning4j.nn.conf.stepfunctions.GradientStepFunction;
 import org.deeplearning4j.nn.layers.convolution.preprocessor.ConvolutionPostProcessor;
 import org.deeplearning4j.nn.layers.factory.LayerFactories;
+import org.deeplearning4j.nn.params.DefaultParamInitializer;
+import org.deeplearning4j.nn.params.PretrainParamInitializer;
 import org.deeplearning4j.nn.weights.WeightInit;
 import org.deeplearning4j.optimize.api.IterationListener;
 import org.deeplearning4j.optimize.listeners.ScoreIterationListener;
@@ -49,6 +51,7 @@ import org.nd4j.linalg.lossfunctions.LossFunctions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -99,7 +102,7 @@ public class MultiLayerTest {
                 .visibleUnit(RBM.VisibleUnit.GAUSSIAN).hiddenUnit(RBM.HiddenUnit.RECTIFIED)
                 .layer(new RBM())
                 .list(4).hiddenLayerSizes(600,250,100).override(3,new ClassifierOverride()).build();
-        
+
         MultiLayerNetwork network = new MultiLayerNetwork(conf);
         network.init();
         network.setListeners(Arrays.<IterationListener>asList(new ScoreIterationListener(10)));
@@ -134,8 +137,46 @@ public class MultiLayerTest {
         DataSet test = trainTest.getTest();
         Evaluation eval = new Evaluation();
         INDArray output = network.output(test.getFeatureMatrix());
-        eval.eval(test.getLabels(),output);
-        log.info("Score " +eval.stats());
+        eval.eval(test.getLabels(), output);
+        log.info("Score " + eval.stats());
+
+    }
+
+
+
+    @Test
+    public void testArchitectureSetup() {
+        MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
+                .iterations(100)
+                .layer(new org.deeplearning4j.nn.conf.layers.RBM())
+                .weightInit(WeightInit.DISTRIBUTION).dist(new UniformDistribution(0,1))
+                .activationFunction("tanh").momentum(0.9)
+                .optimizationAlgo(OptimizationAlgorithm.LBFGS)
+                .constrainGradientToUnitNorm(true).k(1).regularization(true).l2(2e-4)
+                .visibleUnit(org.deeplearning4j.nn.conf.layers.RBM.VisibleUnit.GAUSSIAN).hiddenUnit(org.deeplearning4j.nn.conf.layers.RBM.HiddenUnit.RECTIFIED)
+                .lossFunction(LossFunctions.LossFunction.RMSE_XENT)
+                .nIn(4).nOut(3).list(2)
+                .hiddenLayerSizes(3)
+                .override(1, new ClassifierOverride(1)).build();
+
+        MultiLayerNetwork d = new MultiLayerNetwork(conf);
+        d.init();
+
+        assertEquals(d.getLayers().length, d.getnLayers());
+        assertEquals(2, d.getnLayers());
+
+        assertEquals(d.getLayers()[0].getParam(DefaultParamInitializer.WEIGHT_KEY).rows(), 4);
+        assertEquals(d.getLayers()[0].getParam(DefaultParamInitializer.WEIGHT_KEY).columns(), 3);
+
+        assertArrayEquals(d.getLayers()[0].getParam(DefaultParamInitializer.BIAS_KEY).shape(), new int[]{1, 3});
+        assertArrayEquals(d.getLayers()[0].getParam(PretrainParamInitializer.VISIBLE_BIAS_KEY).shape(), new int[]{1, 4});
+
+
+        assertEquals(d.getLayers()[1].getParam(DefaultParamInitializer.WEIGHT_KEY).rows(), 3);
+        assertEquals(d.getLayers()[1].getParam(DefaultParamInitializer.WEIGHT_KEY).columns(), 3);
+
+        assertArrayEquals(d.getLayers()[1].getParam(DefaultParamInitializer.BIAS_KEY).shape(), new int[]{1, 3});
+
 
     }
 
@@ -156,10 +197,10 @@ public class MultiLayerTest {
                 .hiddenLayerSizes(new int[]{3})
                 .override(1, new ClassifierOverride(1)).build();
 
-            NeuralNetConfiguration conf2 = new NeuralNetConfiguration.Builder()
-                    .layer(new org.deeplearning4j.nn.conf.layers.RBM())
-                    .nIn(784).nOut(600).applySparsity(true).sparsity(0.1)
-                    .build();
+        NeuralNetConfiguration conf2 = new NeuralNetConfiguration.Builder()
+                .layer(new org.deeplearning4j.nn.conf.layers.RBM())
+                .nIn(784).nOut(600).applySparsity(true).sparsity(0.1)
+                .build();
 
         Layer l = LayerFactories.getFactory(conf2).create(conf2,
                 Arrays.<IterationListener>asList(new ScoreIterationListener(2)));

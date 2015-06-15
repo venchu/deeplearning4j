@@ -412,7 +412,8 @@ public class MultiLayerNetwork implements Serializable, Classifier {
             if(type == Layer.Type.FEED_FORWARD) {
                 last.setNIn(hiddenLayerSizes[hiddenLayerSizes.length - 1]);
             }
-            this.layers[layers.length - 1] = LayerFactories.getFactory(last).create(last);initCalled = true;
+            this.layers[layers.length - 1] = LayerFactories.getFactory(last).create(last);
+            initCalled = true;
             initMask();
 
 
