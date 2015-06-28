@@ -121,7 +121,7 @@ public class IRUnitDriver {
 		try {
 			splits = format.getSplits(job, numSplits);
 		} catch (IOException e) {
-			log.error("Error loading properties ",e);
+			throw new RuntimeException(e);
 
 		}
 
