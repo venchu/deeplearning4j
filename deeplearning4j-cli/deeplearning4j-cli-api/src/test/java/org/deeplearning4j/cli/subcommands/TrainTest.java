@@ -27,9 +27,12 @@ public class TrainTest {
 		} catch (Exception e) {
 			System.out.println( "could not load conf: " + e );
 		}
-		train.execute();
+//		train.execute();
 		
 		System.out.println("[testLoadInputFormat] End");
+		
+		
+		
 		
 		
 	}

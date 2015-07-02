@@ -64,13 +64,13 @@ import org.slf4j.LoggerFactory;
 public class Train extends BaseSubCommand {
 
 
-    public static final String EXECUTION_RUNTIME_MODE_KEY = "execution.runtime";
+    public static final String EXECUTION_RUNTIME_MODE_KEY = "dl4j.execution.runtime";
     public static final String EXECUTION_RUNTIME_MODE_DEFAULT = "local";
 
-    public static final String OUTPUT_FILENAME_KEY = "output.directory";
-    public static final String INPUT_DATA_FILENAME_KEY = "input.directory";
+    public static final String OUTPUT_FILENAME_KEY = "dl4j.output.directory";
+    public static final String INPUT_DATA_FILENAME_KEY = "dl4j.input.directory";
 
-    public static final String INPUT_FORMAT_KEY = "input.format";
+    public static final String INPUT_FORMAT_KEY = "dl4j.input.format";
     public static final String DEFAULT_INPUT_FORMAT_CLASSNAME = "org.canova.api.formats.input.impl.SVMLightInputFormat";
 
 
@@ -78,6 +78,8 @@ public class Train extends BaseSubCommand {
     @Option(name = "-conf", usage = "configuration file for training", required = true )
     public String configurationFile = "";
 
+    public boolean validCommandLineParameters = false;
+    
     public Properties configProps = null;
 
     private static Logger log = LoggerFactory.getLogger(Train.class);
@@ -114,7 +116,35 @@ public class Train extends BaseSubCommand {
 
     public Train(String[] args) {
         super(args);
+        
+        this.args = args;
+        CmdLineParser parser = new CmdLineParser(this);
+        try {
+            parser.parseArgument(args);
+        } catch (CmdLineException e) {
+            this.validCommandLineParameters = false;
+            parser.printUsage(System.err);
+            log.error("Unable to parse args", e);
+        }
+        
     }
+    
+    public static void printUsage() {
+    	
+    	System.out.println( "DL4J: Deep Learning Engine Command-Line Interface" );
+    	System.out.println( "" );
+    	System.out.println( "\tUsage:" );
+    	System.out.println( "\t\tdl4j train -conf <conf_file>" );
+    	System.out.println( "" );
+    	System.out.println( "\tConfiguration File:" );
+    	System.out.println( "\t\tContains a list of property entries that describe the training process" );
+    	System.out.println( "" );
+    	System.out.println( "\tExample:" );
+    	System.out.println( "\t\tdl4j train -conf /tmp/iris_conf.txt " );
+    	
+    	
+    }
+    
 
     /**
      * TODO:
@@ -125,21 +155,33 @@ public class Train extends BaseSubCommand {
      */
     @Override
     public void execute() {
+    	
+    	
+    	if ("".equals(this.configurationFile)) {
+    		printUsage();
+    		return;
+    	}
+
+    
         try {
             loadConfigFile();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if ("hadoop".equals(this.runtime.trim().toLowerCase()))
+        if ("hadoop".equals(this.runtime.trim().toLowerCase())) {
+        	
             this.execOnHadoop();
 
-        else if ("spark".equals(this.runtime.trim().toLowerCase()))
+        } else if ("spark".equals(this.runtime.trim().toLowerCase())) {
+        	
             this.execOnSpark();
 
-        else
+        } else {
 
             this.execLocal();
+            
+        }
 
 
 
@@ -254,7 +296,9 @@ public class Train extends BaseSubCommand {
     public void loadConfigFile() throws Exception {
 
         this.configProps = new Properties();
-
+        
+        
+System.out.println( "loading conf file: " + this.configurationFile );
         InputStream in = null;
         try {
             in = new FileInputStream( this.configurationFile );
@@ -273,30 +317,34 @@ public class Train extends BaseSubCommand {
 
 
         // get runtime - EXECUTION_RUNTIME_MODE_KEY
-        if (this.configProps.get( EXECUTION_RUNTIME_MODE_KEY ) != null)
+        if (this.configProps.get( EXECUTION_RUNTIME_MODE_KEY ) != null) {
             this.runtime = (String) this.configProps.get(EXECUTION_RUNTIME_MODE_KEY);
 
-        else
+        } else {
             this.runtime = EXECUTION_RUNTIME_MODE_DEFAULT;
+        }
 
         // get output directory
-        if (null != this.configProps.get( OUTPUT_FILENAME_KEY ))
+        if (null != this.configProps.get( OUTPUT_FILENAME_KEY )) {
+        	
+        
             this.outputDirectory = (String) this.configProps.get(OUTPUT_FILENAME_KEY);
 
-        else
+        } else {
             // default
             this.outputDirectory = "/tmp/dl4_model_default.txt";
         //throw new Exception("no output location!");
-
+        }
 
 
         // get input data
 
-        if ( null != this.configProps.get( INPUT_DATA_FILENAME_KEY ))
+        if ( null != this.configProps.get( INPUT_DATA_FILENAME_KEY )) {
             this.input = (String) this.configProps.get(INPUT_DATA_FILENAME_KEY);
 
-        else
+        } else {
             throw new RuntimeException("no input file to train on!");
+        }
 
     }
 }
