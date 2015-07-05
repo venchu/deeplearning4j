@@ -1,5 +1,9 @@
+
 dl4j.input.format=org.canova.api.formats.input.impl.SVMLightInputFormat
 
 dl4j.input.directory=src/test/resources/data/irisSvmLight.txt
+
+# dl4j.model.config
+dl4j.model.config.architecture=dbn
 
 dl4j.output.directory=/tmp/

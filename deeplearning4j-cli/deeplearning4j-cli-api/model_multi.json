@@ -1,0 +1,114 @@
+{
+  "hiddenLayerSizes" : [ 3 ],
+  "confs" : [ {
+    "sparsity" : 0.0,
+    "useAdaGrad" : true,
+    "lr" : 0.10000000149011612,
+    "corruptionLevel" : 0.30000001192092896,
+    "numIterations" : 100,
+    "momentum" : 0.9,
+    "l2" : 2.0E-4,
+    "useRegularization" : true,
+    "customLossFunction" : null,
+    "momentumAfter" : null,
+    "resetAdaGradIterations" : -1,
+    "numLineSearchIterations" : 100,
+    "dropOut" : 0.0,
+    "applySparsity" : false,
+    "weightInit" : "DISTRIBUTION",
+    "optimizationAlgo" : "LBFGS",
+    "lossFunction" : "RMSE_XENT",
+    "constrainGradientToUnitNorm" : true,
+    "seed" : 1436039636404,
+    "dist" : {
+      "uniform" : {
+        "lower" : 0.0,
+        "upper" : 1.0
+      }
+    },
+    "stepFunction" : {
+      "default" : { }
+    },
+    "layer" : {
+      "RBM" : { }
+    },
+    "variables" : [ ],
+    "activationFunction" : "tanh",
+    "useDropConnect" : false,
+    "visibleUnit" : "GAUSSIAN",
+    "hiddenUnit" : "RECTIFIED",
+    "k" : 1,
+    "weightShape" : [ 4, 3 ],
+    "filterSize" : [ 2, 2, 2, 2 ],
+    "stride" : [ 2, 2 ],
+    "kernel" : 5,
+    "batchSize" : 10,
+    "minimize" : false,
+    "l1" : 0.0,
+    "featureMapSize" : [ 2, 2 ],
+    "rmsDecay" : 0.0,
+    "convolutionType" : "MAX",
+    "rng" : null,
+    "nin" : 4,
+    "nout" : 3
+  }, {
+    "sparsity" : 0.0,
+    "useAdaGrad" : true,
+    "lr" : 0.10000000149011612,
+    "corruptionLevel" : 0.30000001192092896,
+    "numIterations" : 100,
+    "momentum" : 0.9,
+    "l2" : 2.0E-4,
+    "useRegularization" : true,
+    "customLossFunction" : null,
+    "momentumAfter" : null,
+    "resetAdaGradIterations" : -1,
+    "numLineSearchIterations" : 100,
+    "dropOut" : 0.0,
+    "applySparsity" : false,
+    "weightInit" : "ZERO",
+    "optimizationAlgo" : "LBFGS",
+    "lossFunction" : "MCXENT",
+    "constrainGradientToUnitNorm" : true,
+    "seed" : 1436039636404,
+    "dist" : {
+      "uniform" : {
+        "lower" : 0.0,
+        "upper" : 1.0
+      }
+    },
+    "stepFunction" : {
+      "default" : { }
+    },
+    "layer" : {
+      "output" : { }
+    },
+    "variables" : [ ],
+    "activationFunction" : "softmax",
+    "useDropConnect" : false,
+    "visibleUnit" : "GAUSSIAN",
+    "hiddenUnit" : "RECTIFIED",
+    "k" : 1,
+    "weightShape" : [ 4, 3 ],
+    "filterSize" : [ 2, 2, 2, 2 ],
+    "stride" : [ 2, 2 ],
+    "kernel" : 5,
+    "batchSize" : 10,
+    "minimize" : false,
+    "l1" : 0.0,
+    "featureMapSize" : [ 2, 2 ],
+    "rmsDecay" : 0.0,
+    "convolutionType" : "MAX",
+    "rng" : null,
+    "nin" : 4,
+    "nout" : 3
+  } ],
+  "useDropConnect" : false,
+  "useGaussNewtonVectorProductBackProp" : false,
+  "pretrain" : true,
+  "useRBMPropUpAsActivations" : false,
+  "dampingFactor" : 100.0,
+  "processors" : { },
+  "inputPreProcessors" : { },
+  "backward" : false
+}

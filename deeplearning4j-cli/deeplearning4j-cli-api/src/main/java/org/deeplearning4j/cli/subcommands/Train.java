@@ -73,12 +73,16 @@ public class Train extends BaseSubCommand {
     public static final String INPUT_FORMAT_KEY = "dl4j.input.format";
     public static final String DEFAULT_INPUT_FORMAT_CLASSNAME = "org.canova.api.formats.input.impl.SVMLightInputFormat";
 
+    public static final String MODEL_CONFIG_KEY = "dl4j.model.config";
+    public static final String MODEL_CONFIG_VALUE_DEFAULT = ""; // needs to auto-gen then
 
 
     @Option(name = "-conf", usage = "configuration file for training", required = true )
     public String configurationFile = "";
 
     public boolean validCommandLineParameters = false;
+    public boolean validModelConfigJSONFile = false;
+    public boolean usingDefaultModelConfigJSONFile = false;
     
     public Properties configProps = null;
 
@@ -87,7 +91,7 @@ public class Train extends BaseSubCommand {
 
     // NOTE: disabled this setup for now for development purposes
 
-    @Option(name = "-input", usage = "input data",aliases = "-i", required = true)
+    @Option(name = "-input", usage = "input data",aliases = "-i", required = false)
     private String input = "input.txt";
 
 
@@ -108,6 +112,7 @@ public class Train extends BaseSubCommand {
     @Option(name = "-verbose",usage = "verbose(true | false)",aliases  = "-v")
     private boolean verbose = false;
 
+    private String modelConfigPath = "";
 
 
     public Train() {
@@ -128,6 +133,26 @@ public class Train extends BaseSubCommand {
         }
         
     }
+    
+    public void debugPrintConf() {
+    	
+    	System.out.println( "DL4J: Deep Learning Engine Command-Line Interface > Debug Print Conf ----" );
+    	System.out.println( "" );
+    	System.out.println( "" );
+    	System.out.println( "" );
+    	
+    	
+        Properties props = this.configProps; //System.getProperties();
+        Enumeration e = props.propertyNames();
+
+        while (e.hasMoreElements()) {
+            String key = (String) e.nextElement();
+            System.out.println(key + " -- " + props.getProperty(key));
+        }
+
+        System.out.println("-----------------------------\n");
+    }
+    
     
     public static void printUsage() {
     	
@@ -191,8 +216,9 @@ public class Train extends BaseSubCommand {
      * Execute local training
      */
     public void execLocal() {
-        log.warn( "[dl4j] - executing local ... " );
-        log.warn( "using training input: " + this.input );
+        
+    	log.info( "Executing local ... " );
+        log.info( "Using training configuration: " + this.configurationFile );
 
         File inputFile = new File( this.input );
         InputSplit split = new FileSplit( inputFile );
@@ -291,14 +317,44 @@ public class Train extends BaseSubCommand {
         }
 
     }
+    
+    /**
+     * Generate a local default model config json file to start the network off with.
+     * 
+     */
+    public void generateDefaultModelConfigFile() {
+    	
+    	
+    }
+    
+    /**
+     * Loads the model config JSON file
+     * 
+     * Note: this is separate from the training process configuration file by design (too hard to get all that JSON on one property line)
+     * 
+     * 
+     */
+    public void loadModelConfigFile() {
+    	
+    }
 
 
+    /**
+     * Loads the training process config file
+     * 
+     * Configures things like:
+     * 	-	input data path
+     * 	-	output directory
+     * 	-	model json config file path
+     * 
+     * @throws Exception
+     */
     public void loadConfigFile() throws Exception {
 
         this.configProps = new Properties();
         
         
-System.out.println( "loading conf file: " + this.configurationFile );
+//System.out.println( "loading conf file: " + this.configurationFile );
         InputStream in = null;
         try {
             in = new FileInputStream( this.configurationFile );
@@ -332,7 +388,7 @@ System.out.println( "loading conf file: " + this.configurationFile );
 
         } else {
             // default
-            this.outputDirectory = "/tmp/dl4_model_default.txt";
+            this.outputDirectory = "/tmp/dl4_model_default.model";
         //throw new Exception("no output location!");
         }
 
@@ -340,11 +396,26 @@ System.out.println( "loading conf file: " + this.configurationFile );
         // get input data
 
         if ( null != this.configProps.get( INPUT_DATA_FILENAME_KEY )) {
+        	
             this.input = (String) this.configProps.get(INPUT_DATA_FILENAME_KEY);
 
         } else {
             throw new RuntimeException("no input file to train on!");
         }
 
+        // get MODEL_CONFIG_KEY
+        
+        if ( null != this.configProps.get(MODEL_CONFIG_KEY)) {
+        	
+        	this.modelConfigPath = (String) this.configProps.getProperty(MODEL_CONFIG_KEY);
+        	
+        } else {
+        	
+        	// need to auto-gen the model config JSON file [ cold start problem ]
+        	
+        	System.out.println( "Warning: No model was defined, default parameters being used. Training will be sub-optimal." );
+        	
+        }
+        
     }
 }

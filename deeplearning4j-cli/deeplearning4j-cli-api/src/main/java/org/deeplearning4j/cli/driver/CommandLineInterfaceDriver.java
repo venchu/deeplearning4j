@@ -34,14 +34,30 @@ public class CommandLineInterfaceDriver {
      * Print the usage for the command.
      */
 	public static void printUsage() {
-        log.info( "Usage: " );
+/*        log.info( "Usage: " );
 		log.info( "\tdl4j [command] [params] " );
 		log.info( "Commands: " );
 		log.info( "\ttrain\tbuild a deep learning model " );
 		log.info( "\ttest\ttest a deep learning model " );
 		log.info( "\tpredict\tscore new records against a deep learning model " );
 		log.info( "" );
-
+*/
+		
+    	System.out.println( "DL4J: Command-Line Deep Learning Modeling" );
+    	System.out.println( "" );
+    	System.out.println( "\tUsage:" );
+    	System.out.println( "\t\tdl4j <command> <flags>" );
+    	System.out.println( "" );
+    	System.out.println( "\tCommands:" );
+    	System.out.println( "\t\tgenerate\t\tGenerates a model configuration for a specific network architecture" );
+    	System.out.println( "\t\ttrain\t\tGenerates a model configuration for a specific network architecture" );
+    	System.out.println( "" );
+    	System.out.println( "\tExample:" );
+    	System.out.println( "\t\tdl4j generate -conf /tmp/iris_conf.txt \t\t (generates a model configuration file for the network architecture defined in iris_conf.txt)" );
+    	System.out.println( "\t\tdl4j train -conf /tmp/iris_conf.txt " );
+    	
+		
+		
 	}
 
     public void doMain(String[] args) throws Exception {
