@@ -1,6 +1,7 @@
 package org.deeplearning4j.cli.driver;
 
 
+import org.deeplearning4j.cli.subcommands.Generate;
 import org.deeplearning4j.cli.subcommands.Train;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
@@ -17,14 +18,16 @@ import org.slf4j.LoggerFactory;
  * Supports the train command
  *
  * @author Adam Gibson
+ * @author Josh Patterson
  */
 public class CommandLineInterfaceDriver {
 
 	private static Logger log = LoggerFactory.getLogger(CommandLineInterfaceDriver.class);
 
-	@Argument(required=true,index=0,metaVar="action",usage="subcommands, e.g., {train|test|predict}",handler=SubCommandHandler.class)
+	@Argument(required=true,metaVar="action",usage="subcommands, e.g., {generate|train}",handler=SubCommandHandler.class)
 	@SubCommands({
-			@SubCommand(name="train",impl=Train.class)
+			@SubCommand(name="train",impl=Train.class),
+			@SubCommand(name="generate",impl=Generate.class)
 	})
 	private org.deeplearning4j.cli.subcommands.SubCommand subCommand;
 
@@ -63,10 +66,12 @@ public class CommandLineInterfaceDriver {
     public void doMain(String[] args) throws Exception {
         CmdLineParser parser = new CmdLineParser(this);
         try {
+        	
             parser.parseArgument(args);
             subCommand.execute();
         } catch( CmdLineException e ) {
             System.err.println(e.getMessage());
+        	printUsage();
             return;
         }
     }

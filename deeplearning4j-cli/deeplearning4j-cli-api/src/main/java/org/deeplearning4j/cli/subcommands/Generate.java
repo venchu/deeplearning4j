@@ -14,14 +14,14 @@ import org.kohsuke.args4j.Option;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Generate extends BaseSubCommand {
+public class Generate implements SubCommand {
 	
 	private static Logger log = LoggerFactory.getLogger(Generate.class);
 
     public static final String NETWORK_ARCHITECTURE_KEY = "dl4j.model.config.architecture";
     public static final String NETWORK_ARCHITECTURE_DEFAULT = "dbn";
 
-    @Option(name = "-conf", usage = "configuration file for generating the network architecture", required = true )
+    @Option(name = "-conf", usage = "configuration file for generating the network architecture" )
     public String configurationFile = "";
     
     public boolean validCommandLineParameters = false;
@@ -29,13 +29,21 @@ public class Generate extends BaseSubCommand {
     public Properties configProps = null;
     public String modelConfigPath = "";
     public String networkArchitecture = NETWORK_ARCHITECTURE_DEFAULT;
+    protected String[] args;
     
-    public Generate() {
-        this(new String[1]);
-    }
-
+    public Generate() { 
+    	
+  //  	this({ "" });
+    };
+    
     public Generate(String[] args) {
-        super(args);
+        
+    	
+    	/*
+    	super(args);
+        
+    	System.out.println("Generate CTOR");
+        
         
         this.args = args;
         CmdLineParser parser = new CmdLineParser(this);
@@ -43,9 +51,26 @@ public class Generate extends BaseSubCommand {
             parser.parseArgument(args);
         } catch (CmdLineException e) {
             this.validCommandLineParameters = false;
+            //parser.printUsage(System.err);
+            //log.error("Unable to parse args", e);
+            printUsage();
+        }
+        */
+    	
+
+        this.args = args;
+        CmdLineParser parser = new CmdLineParser(this);
+        try {
+            parser.parseArgument(args);
+        } catch (CmdLineException e) {
+        	
+        	System.out.println( "early err -----" );
+        	
+            this.validCommandLineParameters = false;
             parser.printUsage(System.err);
             log.error("Unable to parse args", e);
         }
+    	
         
     }
     
@@ -53,16 +78,16 @@ public class Generate extends BaseSubCommand {
     
     public static void printUsage() {
     	
-    	System.out.println( "DL4J: Deep Learning Engine Command-Line Interface" );
+    	System.out.println( "DL4J: CLI Model Achitecture JSON Generator" );
     	System.out.println( "" );
     	System.out.println( "\tUsage:" );
-    	System.out.println( "\t\tdl4j train -conf <conf_file>" );
+    	System.out.println( "\t\tdl4j generate -conf <conf_file>" );
     	System.out.println( "" );
     	System.out.println( "\tConfiguration File:" );
-    	System.out.println( "\t\tContains a list of property entries that describe the training process" );
+    	System.out.println( "\t\tContains a list of property entries that describe the model configuration generation process" );
     	System.out.println( "" );
     	System.out.println( "\tExample:" );
-    	System.out.println( "\t\tdl4j train -conf /tmp/iris_conf.txt " );
+    	System.out.println( "\t\tdl4j generate -conf /tmp/iris_conf.txt " );
     	
     	
     }  

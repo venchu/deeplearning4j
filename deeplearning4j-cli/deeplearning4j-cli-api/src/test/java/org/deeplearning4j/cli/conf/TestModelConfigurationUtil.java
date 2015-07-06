@@ -52,9 +52,9 @@ public class TestModelConfigurationUtil {
 	}
 	
 	@Test
-	public void test() {
+	public void testDBNModelArchitectureGenerate() {
 		
-		String conf_file = "src/test/resources/architectures/dbn/conf/dbn_test_conf.txt";
+		String conf_file = "src/test/resources/generate/architectures/dbn/conf/dbn_generate_conf.txt";
 		
 		ModelConfigurationUtil util = new ModelConfigurationUtil( loadProps( conf_file ) );
 		util.generateDefaultDBNConfigFile();
@@ -62,6 +62,16 @@ public class TestModelConfigurationUtil {
 		
 	}
 
+	@Test
+	public void testCNNModelArchitectureGenerate() {
+		
+		String conf_file = "src/test/resources/generate/architectures/cnn/conf/cnn_generate_conf.txt";
+		
+		ModelConfigurationUtil util = new ModelConfigurationUtil( loadProps( conf_file ) );
+		util.generateDefaultCNNConfigFile();
+		
+		
+	}
 	
 	@Test
 	public void testSerdeMechanics() {

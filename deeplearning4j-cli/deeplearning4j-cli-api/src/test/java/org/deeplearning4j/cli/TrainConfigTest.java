@@ -34,9 +34,14 @@ import java.io.File;
 import static org.junit.Assert.assertEquals;
 
 /**
+ * 
+ * Deprecated test
+ * 
  * @author sonali
  */
 public class TrainConfigTest {
+	
+	/*
     @Test
     public void testInputModelTrain() throws Exception {
         Model testModelFlag = new Model();
@@ -58,4 +63,5 @@ public class TrainConfigTest {
 
         Train train = new Train(cmd);
     }
+    */
 }

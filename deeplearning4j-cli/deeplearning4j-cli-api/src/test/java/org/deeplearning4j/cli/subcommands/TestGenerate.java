@@ -9,9 +9,11 @@ public class TestGenerate {
 	@Test
 	public void test() {
 
-		String conf_file = "src/test/resources/architectures/dbn/conf/dbn_test_conf.txt";
+		String conf_file = "src/test/resources/generate/architectures/dbn/conf/dbn_generate_conf.txt";
 		
-		String[] args = { "-conf", conf_file }; // ,"-input",conf_file};
+		//String[] args = { "-conf", conf_file }; // ,"-input",conf_file};
+		
+		String[] args = { };
 		
 		Generate cmd = new Generate( args );
 /*		try {

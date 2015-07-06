@@ -30,6 +30,7 @@ import org.canova.api.formats.input.InputFormat;
 import org.canova.api.records.reader.RecordReader;
 import org.canova.api.split.FileSplit;
 import org.canova.api.split.InputSplit;
+import org.deeplearning4j.cli.conf.ModelConfigurationUtil;
 import org.deeplearning4j.datasets.canova.RecordReaderDataSetIterator;
 import org.deeplearning4j.nn.api.Layer;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
@@ -61,7 +62,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author sonali
  */
-public class Train extends BaseSubCommand {
+public class Train implements SubCommand {
 
 
     public static final String EXECUTION_RUNTIME_MODE_KEY = "dl4j.execution.runtime";
@@ -73,11 +74,12 @@ public class Train extends BaseSubCommand {
     public static final String INPUT_FORMAT_KEY = "dl4j.input.format";
     public static final String DEFAULT_INPUT_FORMAT_CLASSNAME = "org.canova.api.formats.input.impl.SVMLightInputFormat";
 
+    // the parameters of the actual model
     public static final String MODEL_CONFIG_KEY = "dl4j.model.config";
     public static final String MODEL_CONFIG_VALUE_DEFAULT = ""; // needs to auto-gen then
 
 
-    @Option(name = "-conf", usage = "configuration file for training", required = true )
+    @Option(name = "-conf", usage = "configuration file for training" )
     public String configurationFile = "";
 
     public boolean validCommandLineParameters = false;
@@ -97,8 +99,8 @@ public class Train extends BaseSubCommand {
 
     @Option(name = "-output", usage = "location for saving model", aliases = "-o")
     private String outputDirectory = "output.txt";
-    @Option(name = "-model",usage = "location for configuration of model",aliases = "-m")
-    private String modelPath;
+//    @Option(name = "-model",usage = "location for configuration of model",aliases = "-m")
+//    private String modelPath;
     @Option(name = "-type",usage = "type of network (layer or multi layer)")
     private String type = "multi";
 
@@ -112,16 +114,17 @@ public class Train extends BaseSubCommand {
     @Option(name = "-verbose",usage = "verbose(true | false)",aliases  = "-v")
     private boolean verbose = false;
 
-    private String modelConfigPath = "";
-
+    // the json file that describes the model
+    private String jsonModelConfigPath = "";
+    protected String[] args;
 
     public Train() {
-        this(new String[1]);
+    //    this(new String[1]);
     }
 
     public Train(String[] args) {
-        super(args);
-        
+        //super(args);
+        /*
         this.args = args;
         CmdLineParser parser = new CmdLineParser(this);
         try {
@@ -131,17 +134,26 @@ public class Train extends BaseSubCommand {
             parser.printUsage(System.err);
             log.error("Unable to parse args", e);
         }
-        
+        */
+    	
+        this.args = args;
+        CmdLineParser parser = new CmdLineParser(this);
+        try {
+            parser.parseArgument(args);
+        } catch (CmdLineException e) {
+            this.validCommandLineParameters = false;
+            parser.printUsage(System.err);
+            log.error("Unable to parse args", e);
+        }
+    	
+    	
     }
     
     public void debugPrintConf() {
     	
     	System.out.println( "DL4J: Deep Learning Engine Command-Line Interface > Debug Print Conf ----" );
-    	System.out.println( "" );
-    	System.out.println( "" );
-    	System.out.println( "" );
     	
-    	
+    	System.out.println("-----------------------------");
         Properties props = this.configProps; //System.getProperties();
         Enumeration e = props.propertyNames();
 
@@ -156,7 +168,7 @@ public class Train extends BaseSubCommand {
     
     public static void printUsage() {
     	
-    	System.out.println( "DL4J: Deep Learning Engine Command-Line Interface" );
+    	System.out.println( "DL4J: CLI Training System" );
     	System.out.println( "" );
     	System.out.println( "\tUsage:" );
     	System.out.println( "\t\tdl4j train -conf <conf_file>" );
@@ -193,6 +205,16 @@ public class Train extends BaseSubCommand {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        
+        // now check on the model
+        
+        this.validateModelConfigFile();
+        
+        if (!this.validModelConfigJSONFile) {
+        	System.out.println( "Shutting down, no valid model JSON architecture file specified: " + this.jsonModelConfigPath );
+        	return;
+        }
+        
 
         if ("hadoop".equals(this.runtime.trim().toLowerCase())) {
         	
@@ -234,7 +256,7 @@ public class Train extends BaseSubCommand {
 
         if(type.equals("multi")) {
             try {
-                MultiLayerConfiguration conf = MultiLayerConfiguration.fromJson(FileUtils.readFileToString(new File(modelPath)));
+                MultiLayerConfiguration conf = MultiLayerConfiguration.fromJson(FileUtils.readFileToString(new File( this.jsonModelConfigPath )));
                 DataSetIterator iter = new RecordReaderDataSetIterator( reader , conf.getConf(0).getBatchSize(),-1,conf.getConf(conf.getConfs().size() - 1).getNOut());
 
                 MultiLayerNetwork network = new MultiLayerNetwork(conf);
@@ -257,7 +279,7 @@ public class Train extends BaseSubCommand {
         }
         else {
             try {
-                NeuralNetConfiguration conf = NeuralNetConfiguration.fromJson(FileUtils.readFileToString(new File(modelPath)));
+                NeuralNetConfiguration conf = NeuralNetConfiguration.fromJson(FileUtils.readFileToString(new File( this.jsonModelConfigPath )));
                 LayerFactory factory = LayerFactories.getFactory(conf);
                 Layer l = factory.create(conf);
                 DataSetIterator iter = new RecordReaderDataSetIterator( reader , conf.getBatchSize());
@@ -334,7 +356,21 @@ public class Train extends BaseSubCommand {
      * 
      * 
      */
-    public void loadModelConfigFile() {
+    public void validateModelConfigFile() {
+    	
+    	// validate the model arch
+    	
+    	if (ModelConfigurationUtil.validateExistingJsonConfigFile( this.jsonModelConfigPath )) {
+    		
+    		System.out.println( "JSON Model Architecture is validated." );
+    		this.validModelConfigJSONFile = true;
+    		
+    	} else {
+    		
+    		this.validModelConfigJSONFile = false;
+    		
+    	}
+    	
     	
     }
 
@@ -407,7 +443,7 @@ public class Train extends BaseSubCommand {
         
         if ( null != this.configProps.get(MODEL_CONFIG_KEY)) {
         	
-        	this.modelConfigPath = (String) this.configProps.getProperty(MODEL_CONFIG_KEY);
+        	this.jsonModelConfigPath = (String) this.configProps.getProperty(MODEL_CONFIG_KEY);
         	
         } else {
         	

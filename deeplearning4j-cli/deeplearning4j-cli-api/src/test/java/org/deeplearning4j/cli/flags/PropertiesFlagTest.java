@@ -33,6 +33,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class PropertiesFlagTest extends BaseFlagTest {
 
+	/*
     @Test
     public void test() throws Exception {
         File file = new ClassPathResource("testConfig.txt").getFile();
@@ -43,4 +44,5 @@ public class PropertiesFlagTest extends BaseFlagTest {
         assertEquals("2", testConfig.get("two"));
 
     }
+    */
 }

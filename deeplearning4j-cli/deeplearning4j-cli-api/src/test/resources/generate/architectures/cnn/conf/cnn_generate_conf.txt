@@ -1,0 +1,22 @@
+
+dl4j.input.format=org.canova.api.formats.input.impl.SVMLightInputFormat
+
+# this should be something else
+dl4j.input.directory=src/test/resources/data/irisSvmLight.txt
+
+# dl4j.model.config - we dont have a config file here because this is a cold start unit test
+dl4j.model.config.architecture=cnn
+dl4j.model.config=/tmp/generated_cnn_network.json
+
+# CNN-specific conf flags that it will pick up in the conf generator
+
+dl4j.model.cnn.output.size=10
+
+dl4j.model.cnn.input.rows=28
+
+dl4j.model.cnn.input.cols=28
+
+dl4j.model.cnn.featuremap.size=5
+    
+
+dl4j.output.directory=/tmp/

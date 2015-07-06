@@ -1,11 +1,11 @@
 {
-  "hiddenLayerSizes" : [ 3 ],
+  "hiddenLayerSizes" : [ 9 ],
   "confs" : [ {
     "sparsity" : 0.0,
     "useAdaGrad" : true,
-    "lr" : 0.10000000149011612,
+    "lr" : 0.0010000000474974513,
     "corruptionLevel" : 0.30000001192092896,
-    "numIterations" : 100,
+    "numIterations" : 5,
     "momentum" : 0.9,
     "l2" : 2.0E-4,
     "useRegularization" : true,
@@ -15,15 +15,15 @@
     "numLineSearchIterations" : 100,
     "dropOut" : 0.0,
     "applySparsity" : false,
-    "weightInit" : "DISTRIBUTION",
+    "weightInit" : "XAVIER",
     "optimizationAlgo" : "LBFGS",
     "lossFunction" : "RMSE_XENT",
     "constrainGradientToUnitNorm" : true,
-    "seed" : 1436039636404,
+    "seed" : 123,
     "dist" : {
-      "uniform" : {
-        "lower" : 0.0,
-        "upper" : 1.0
+      "normal" : {
+        "mean" : 0.001,
+        "std" : 1.0
       }
     },
     "stepFunction" : {
@@ -33,7 +33,7 @@
       "RBM" : { }
     },
     "variables" : [ ],
-    "activationFunction" : "tanh",
+    "activationFunction" : "relu",
     "useDropConnect" : false,
     "visibleUnit" : "GAUSSIAN",
     "hiddenUnit" : "RECTIFIED",
@@ -42,7 +42,7 @@
     "filterSize" : [ 2, 2, 2, 2 ],
     "stride" : [ 2, 2 ],
     "kernel" : 5,
-    "batchSize" : 10,
+    "batchSize" : 100,
     "minimize" : false,
     "l1" : 0.0,
     "featureMapSize" : [ 2, 2 ],
@@ -54,9 +54,9 @@
   }, {
     "sparsity" : 0.0,
     "useAdaGrad" : true,
-    "lr" : 0.10000000149011612,
+    "lr" : 0.0010000000474974513,
     "corruptionLevel" : 0.30000001192092896,
-    "numIterations" : 100,
+    "numIterations" : 5,
     "momentum" : 0.9,
     "l2" : 2.0E-4,
     "useRegularization" : true,
@@ -66,15 +66,15 @@
     "numLineSearchIterations" : 100,
     "dropOut" : 0.0,
     "applySparsity" : false,
-    "weightInit" : "ZERO",
-    "optimizationAlgo" : "LBFGS",
+    "weightInit" : "XAVIER",
+    "optimizationAlgo" : "ITERATION_GRADIENT_DESCENT",
     "lossFunction" : "MCXENT",
     "constrainGradientToUnitNorm" : true,
-    "seed" : 1436039636404,
+    "seed" : 123,
     "dist" : {
-      "uniform" : {
-        "lower" : 0.0,
-        "upper" : 1.0
+      "normal" : {
+        "mean" : 0.001,
+        "std" : 1.0
       }
     },
     "stepFunction" : {
@@ -93,7 +93,7 @@
     "filterSize" : [ 2, 2, 2, 2 ],
     "stride" : [ 2, 2 ],
     "kernel" : 5,
-    "batchSize" : 10,
+    "batchSize" : 100,
     "minimize" : false,
     "l1" : 0.0,
     "featureMapSize" : [ 2, 2 ],

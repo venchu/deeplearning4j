@@ -1,0 +1,10 @@
+
+dl4j.input.format=org.canova.api.formats.input.impl.SVMLightInputFormat
+
+dl4j.input.directory=src/test/resources/data/irisSvmLight.txt
+
+# dl4j.model.config - we dont have a config file here because this is a cold start unit test
+dl4j.model.config.architecture=dbn
+dl4j.model.config=src/test/resources/train/architectures/dbn/conf/model_arch.json
+
+dl4j.output.directory=/tmp/
