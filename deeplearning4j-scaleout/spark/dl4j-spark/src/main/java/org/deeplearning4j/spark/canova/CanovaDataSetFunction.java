@@ -48,7 +48,6 @@ public class CanovaDataSetFunction implements Function<Collection<Writable>,Data
         this.converter = converter;
     }
 
-
     @Override
     public DataSet call(Collection<Writable> writables) throws Exception {
         List<Writable> list;
