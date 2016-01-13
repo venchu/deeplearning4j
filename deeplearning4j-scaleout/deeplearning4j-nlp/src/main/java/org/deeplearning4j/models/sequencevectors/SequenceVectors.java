@@ -262,6 +262,7 @@ public class SequenceVectors<T extends SequenceElement> extends WordVectorsImpl<
          */
         public Builder<T> sequenceLearningAlgorithm(@NonNull SequenceLearningAlgorithm<T> algorithm) {
             this.sequenceLearningAlgorithm = algorithm;
+            this.trainSequenceVectors = true;
             return this;
         }
 
@@ -289,6 +290,7 @@ public class SequenceVectors<T extends SequenceElement> extends WordVectorsImpl<
          */
         public Builder<T> elementsLearningAlgorithm(@NonNull ElementsLearningAlgorithm<T> algorithm) {
             this.elementsLearningAlgorithm = algorithm;
+            this.trainElementsVectors = true;
             return this;
         }
 
@@ -598,6 +600,8 @@ public class SequenceVectors<T extends SequenceElement> extends WordVectorsImpl<
 
             vectors.elementsLearningAlgorithm = this.elementsLearningAlgorithm;
             vectors.sequenceLearningAlgorithm = this.sequenceLearningAlgorithm;
+            vectors.trainElementsVectors = this.trainElementsVectors;
+            vectors.trainSequenceVectors = this.trainSequenceVectors;
 
             this.configuration.setLearningRate(this.learningRate);
             this.configuration.setLayersSize(layerSize);
