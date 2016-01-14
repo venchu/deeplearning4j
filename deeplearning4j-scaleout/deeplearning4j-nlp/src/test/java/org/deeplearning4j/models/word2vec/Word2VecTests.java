@@ -149,26 +149,25 @@ public class Word2VecTests {
         // Split on white spaces in the line to get words
         TokenizerFactory t = new DefaultTokenizerFactory();
         t.setTokenPreProcessor(new CommonPreprocessor());
-
+/*
         InMemoryLookupCache cache = new InMemoryLookupCache();
         WeightLookupTable table = new InMemoryLookupTable.Builder()
                 .vectorLength(100)
                 .useAdaGrad(false)
                 .cache(cache)
                 .lr(0.025f).build();
-
+*/
         Word2Vec vec = new Word2Vec.Builder()
-                .minWordFrequency(5)
-                .iterations(1)
-                .layerSize(100)
-                .lookupTable(table)
-                .stopWords(new ArrayList<String>())
-                .vocabCache(cache)
-                .seed(42)
-                .sampling(0)
-                .windowSize(5)
-                .modelUtils(new BasicModelUtils<VocabWord>())
-                .iterate(iter)
+                .batchSize(1000) //# words per minibatch.
+                .sampling(1e-5) // negative sampling. drops words out
+                .minWordFrequency(10) //
+                .useAdaGrad(true) //
+                .layerSize(300) // word feature vector size
+                .iterations(1) // # iterations to train
+                .learningRate(0.025) //
+                .minLearningRate(1e-2) // learning rate decays wrt # words. floor learning
+                .negativeSample(10) // sample size 10 words
+                .iterate(iter) //
                 .tokenizerFactory(t)
                 .build();
 

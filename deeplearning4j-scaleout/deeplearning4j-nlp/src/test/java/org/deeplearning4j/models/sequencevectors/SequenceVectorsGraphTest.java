@@ -1,5 +1,6 @@
 package org.deeplearning4j.models.sequencevectors;
 
+import org.canova.api.berkeley.Pair;
 import org.canova.api.util.ClassPathResource;
 import org.deeplearning4j.models.embeddings.learning.impl.elements.SkipGram;
 import org.deeplearning4j.models.embeddings.learning.impl.sequence.DBOW;
@@ -7,6 +8,7 @@ import org.deeplearning4j.models.sequencevectors.classes.Transaction;
 import org.deeplearning4j.models.sequencevectors.interfaces.SequenceIterator;
 import org.deeplearning4j.models.sequencevectors.iterators.AbstractSequenceIterator;
 import org.deeplearning4j.models.sequencevectors.sequence.Sequence;
+import org.deeplearning4j.text.documentiterator.LabelsSource;
 import org.deeplearning4j.text.sentenceiterator.BasicLineIterator;
 import org.deeplearning4j.text.sentenceiterator.SentenceIterator;
 import org.junit.After;
@@ -14,8 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -52,6 +53,7 @@ public class SequenceVectorsGraphTest {
 
         // we roll over them, until we get new account ID
         Sequence<Transaction> currentSequence = new Sequence<Transaction>();
+        List<String> labels = new ArrayList<>();
         long lastId = 0;
         while (lineIterator.hasNext()) {
             String line = lineIterator.nextSentence();
@@ -90,6 +92,9 @@ public class SequenceVectorsGraphTest {
 
             long clientId = transaction.getAccountId();
             if (lastId != clientId) {
+                if (!labels.contains(String.valueOf(lastId))) {
+                    labels.add(String.valueOf(lastId));
+                }
                 System.out.println("Saving sequence for account: [" + lastId + "], transactions #: ["+ currentSequence.getElements().size()+"]");
                 sequences.add(currentSequence);
                 // at this moment we build graph for latest account
@@ -103,7 +108,8 @@ public class SequenceVectorsGraphTest {
         }
 
 
-        SequenceIterator<Transaction> iterator = new AbstractSequenceIterator.Builder<Transaction>(sequences)
+
+        AbstractSequenceIterator<Transaction> iterator = new AbstractSequenceIterator.Builder<Transaction>(sequences)
                 .build();
 
 
@@ -155,5 +161,39 @@ public class SequenceVectorsGraphTest {
 
         double simA3 = vec.similarity("555500088998" , "555500090784");
         System.out.println("Similarity between accounts 3: " + simA3);
+
+        System.out.println("-----------------------------");
+
+        double simB1 = vec.similarity("555500032180" , "555500032477");
+        System.out.println("Similarity between bad accounts 1: " + simB1);
+
+        double simB2 = vec.similarity("555500040462" , "555500065777");
+        System.out.println("Similarity between bad accounts 2: " + simB2);
+
+        Collection<Pair<String, Double>> list = nearestAccountsFor(vec, "555500032477", labels, 10); //vec.wordsNearest(new ArrayList<String>(Arrays.asList(new String[]{"555500032477"})), new ArrayList<String>(), 10 );
+        System.out.println("Nearest for [555500032477]: ");
+        for (Pair<String, Double> line: list) {
+            System.out.println("               ["+line.getFirst()+"] > "+line.getSecond()+" ");
+        }
+    }
+
+    private Collection<Pair<String, Double>> nearestAccountsFor(SequenceVectors vec, String account, List<String> accounts, int number) {
+        List<Pair<String, Double>> results = new ArrayList<>();
+        for (String label: accounts) {
+            double sim = vec.similarity(account, label);
+            results.add(Pair.makePair(account, sim));
+        }
+
+        results.sort(new SimComp());
+
+        return results.subList(0, 10);
+    }
+
+    private class SimComp implements Comparator<Pair<String, Double>> {
+
+        @Override
+        public int compare(Pair<String, Double> o1, Pair<String, Double> o2) {
+            return Double.compare(o1.getSecond(), o2.getSecond());
+        }
     }
 }
