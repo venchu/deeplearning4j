@@ -89,6 +89,8 @@ public class DefaultLayerFactory implements LayerFactory {
             return new org.deeplearning4j.nn.layers.feedforward.autoencoder.recursive.RecursiveAutoEncoder(conf);   
         if(layerConfig instanceof org.deeplearning4j.nn.conf.layers.ConvolutionLayer)
             return new org.deeplearning4j.nn.layers.convolution.ConvolutionLayer(conf);
+        if(layerConfig instanceof org.deeplearning4j.nn.conf.layers.ConvolutionCuDNNLayer)
+            return new org.deeplearning4j.nn.layers.convolution.ConvolutionCuDNNLayer(conf);
         if(layerConfig instanceof org.deeplearning4j.nn.conf.layers.SubsamplingLayer)
             return new org.deeplearning4j.nn.layers.convolution.subsampling.SubsamplingLayer(conf);
          if(layerConfig instanceof org.deeplearning4j.nn.conf.layers.BatchNormalization)

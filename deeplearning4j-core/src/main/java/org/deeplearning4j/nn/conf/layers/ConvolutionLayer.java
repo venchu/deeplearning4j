@@ -16,7 +16,7 @@ public class ConvolutionLayer extends FeedForwardLayer {
     protected int[] stride; // Default is 2. Down-sample by a factor of 2
     protected int[] padding;
 
-    private ConvolutionLayer(Builder builder) {
+    protected ConvolutionLayer(Builder builder) {
     	super(builder);
         this.convolutionType = builder.convolutionType;
         if(builder.kernelSize.length != 2)

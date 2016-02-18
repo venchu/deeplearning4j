@@ -74,6 +74,8 @@ public class LayerBuilderTest {
         assertEquals(numIn, ff.getNIn());
         assertEquals(numOut, ff.getNOut());
     }
+
+
     @Test
     public void testConvolutionLayer() throws Exception {
         ConvolutionLayer conv = new ConvolutionLayer.Builder(kernelSize, stride, padding)
@@ -81,7 +83,18 @@ public class LayerBuilderTest {
 
         checkSerialization(conv);
 
-        assertEquals(convType, conv.getConvolutionType());
+        assertArrayEquals(kernelSize, conv.getKernelSize());
+        assertArrayEquals(stride, conv.getStride());
+        assertArrayEquals(padding, conv.getPadding());
+    }
+
+    @Test
+    public void testConvolutionCuDNNLayer() throws Exception {
+        ConvolutionCuDNNLayer conv = new ConvolutionCuDNNLayer.Builder(kernelSize, stride, padding)
+                .convolutionType(convType).build();
+
+        checkSerialization(conv);
+
         assertArrayEquals(kernelSize, conv.getKernelSize());
         assertArrayEquals(stride, conv.getStride());
         assertArrayEquals(padding, conv.getPadding());
