@@ -329,7 +329,16 @@
                 <version>${canova.version}</version>
             </dependency>
 
-
+            <dependency>
+                <groupId>org.jcuda</groupId>
+                <artifactId>jcuda</artifactId>
+                <version>0.7.5</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jcuda</groupId>
+                <artifactId>jcublas</artifactId>
+                <version>0.7.5</version>
+            </dependency>
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
