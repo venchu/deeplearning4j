@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7d74aff8-a4bb-47e8-9f50-e8d0961cbf18" name="Default" comment="" />
+    <list default="true" id="7d74aff8-a4bb-47e8-9f50-e8d0961cbf18" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/kr-convolutionalnets.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kr-eigenvector.md" afterPath="$PROJECT_DIR$/kr-eigenvector.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kr-gettingstarted.md" afterPath="$PROJECT_DIR$/kr-gettingstarted.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kr-lstm.md" afterPath="$PROJECT_DIR$/kr-lstm.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kr-neuralnet-overview.md" afterPath="$PROJECT_DIR$/kr-neuralnet-overview.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kr-quickstart.md" afterPath="$PROJECT_DIR$/kr-quickstart.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kr-restrictedboltzmannmachine.md" afterPath="$PROJECT_DIR$/kr-restrictedboltzmannmachine.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kr-usingrnns.md" afterPath="$PROJECT_DIR$/kr-usingrnns.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kr-word2vec.md" afterPath="$PROJECT_DIR$/kr-word2vec.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kr-about.md" afterPath="$PROJECT_DIR$/kr-about.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kr-index.md" afterPath="$PROJECT_DIR$/kr-index.md" />
+    </list>
     <ignored path="deeplearning4j-parent.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -78,7 +90,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -89,10 +100,11 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
       <pane id="Scope">
         <subPane subId="Project Files" />
       </pane>
+      <pane id="Scratches" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
