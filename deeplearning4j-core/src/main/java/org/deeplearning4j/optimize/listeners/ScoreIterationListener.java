@@ -29,10 +29,11 @@ import org.slf4j.LoggerFactory;
  * @author Adam Gibson
  */
 public class ScoreIterationListener implements IterationListener {
-    private int printIterations = 10;
+    private int printIterations = 1;
     private static final Logger log = LoggerFactory.getLogger(ScoreIterationListener.class);
     private boolean invoked = false;
     private long iterCount = 0;
+    private long batchCount = 0;
 
     /**
      * @param printIterations    frequency with which to print scores (i.e., every printIterations parameter updates)
@@ -55,11 +56,15 @@ public class ScoreIterationListener implements IterationListener {
     public void iterationDone(Model model, int iteration) {
         if(printIterations <= 0)
             printIterations = 1;
-        if(iterCount % printIterations == 0) {
+        if(iteration % printIterations == 0) {
             invoke();
             double result = model.score();
-            log.info("Score at iteration " + iterCount + " is " + result);
+            log.info("Score at iteration " + iteration + " & batch " + batchCount + " is " + result);
         }
-        iterCount++;
+        if(iteration == iterCount)
+            batchCount++;
+        else
+            batchCount = 0;
+        iterCount = iteration;
     }
 }
