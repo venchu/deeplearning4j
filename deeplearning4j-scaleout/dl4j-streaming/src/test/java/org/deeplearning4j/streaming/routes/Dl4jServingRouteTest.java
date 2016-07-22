@@ -60,41 +60,6 @@ public class Dl4jServingRouteTest extends CamelTestSupport {
         zookeeper.shutdown();
     }
 
-    @Override
-    protected RoutesBuilder createRouteBuilder() throws Exception {
-        DataSetIterator iter = new IrisDataSetIterator(150, 150);
-        next = iter.next();
-        next.normalizeZeroMeanZeroUnitVariance();
-
-        return new RouteBuilder() {
-            @Override
-            public void configure() throws Exception {
-                final String kafkaUri = String.format("kafka:%s?topic=%s&groupId=dl4j-serving&zookeeperHost=%s&zookeeperPort=%d&serializerClass=%s&keySerializerClass=%s",
-                        kafkaCluster.getBrokerList(),
-                        topicName,
-                        "localhost",
-                        zookeeper.getPort(),
-                        StringEncoder.class.getName(),
-                        StringEncoder.class.getName());
-                from("direct:start")
-                        .process(new Processor() {
-                            @Override
-                            public void process(Exchange exchange) throws Exception {
-                                final INDArray arr = next.getFeatureMatrix();
-                                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                                DataOutputStream dos = new DataOutputStream(bos);
-                                Nd4j.write(arr, dos);
-                                byte[] bytes = bos.toByteArray();
-                                String base64 = Base64.encodeBase64String(bytes);
-                                exchange.getIn().setBody(base64, String.class);
-                                exchange.getIn().setHeader(KafkaConstants.KEY,UUID.randomUUID().toString());
-                                exchange.getIn().setHeader(KafkaConstants.PARTITION_KEY,"1");
-                            }
-                        }).to(kafkaUri);
-            }
-        };
-    }
-
 
     @Override
     public boolean isUseDebugger() {
